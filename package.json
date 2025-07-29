@@ -1,0 +1,54 @@
+{
+  "name": "barkme-mcp-server",
+  "version": "0.1.0",
+  "description": "A Model Context Protocol (MCP) server that provides iOS push notifications through the Bark service",
+  "main": "dist/index.js",
+  "bin": {
+    "barkme-mcp-server": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod 755 dist/index.js",
+    "watch": "tsc --watch",
+    "start": "node dist/index.js",
+    "format": "prettier --write src/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "bark",
+    "notifications",
+    "ios",
+    "apns",
+    "push-notifications",
+    "claude",
+    "model-context-protocol"
+  ],
+  "author": "Eric Wang <wrqatw@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thevibeworks/barkme-mcp-server.git"
+  },
+  "homepage": "https://github.com/thevibeworks/barkme-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/thevibeworks/barkme-mcp-server/issues"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "got": "^14.4.7",
+    "zod": "^3.25.76",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,75 @@
+# Smithery configuration file: https://smithery.ai/docs/build/project-config
+
+startCommand:
+  type: stdio
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'node', args: ['dist/index.js'], env: {
+      BARK_DEVICES: config.barkDevices,
+      BARK_DEFAULT_DEVICE: config.barkDefaultDevice,
+      BARK_SERVER: config.barkServer,
+      BARK_GROUP: config.barkGroup,
+      BARK_RETRY: String(config.barkRetry),
+      BARK_ASYNC: config.barkAsync ? 'true' : 'false',
+      BARK_SOUND: config.barkSound,
+      BARK_ICON: config.barkIcon,
+      BARK_LEVEL: config.barkLevel,
+      BARK_VOLUME: config.barkVolume !== undefined ? String(config.barkVolume) : undefined,
+      HTTPS_PROXY: config.proxyUrl
+    } })
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - barkDevices
+    properties:
+      barkDevices:
+        type: string
+        description: "Device keys: 'iPhone:key1,iPad:key2' or 'key1,key2'"
+      barkDefaultDevice:
+        type: string
+        description: Default device alias for fallback
+      barkServer:
+        type: string
+        default: https://api.day.app
+        description: Bark API server URL
+      barkGroup:
+        type: string
+        default: Bark MCP Server
+        description: Notification group
+      barkRetry:
+        type: number
+        default: 1
+        description: Retry count on failure
+      barkAsync:
+        type: boolean
+        default: true
+        description: "Async mode: true or false"
+      barkSound:
+        type: string
+        description: Default notification sound
+      barkIcon:
+        type: string
+        description: Default icon URL
+      barkLevel:
+        type: string
+        description: Default urgency level
+      barkVolume:
+        type: number
+        description: Default volume
+      proxyUrl:
+        type: string
+        description: Proxy URL for HTTP requests
+  exampleConfig:
+    barkDevices: iPhone:abc123,iPad:def456
+    barkDefaultDevice: iPhone
+    barkServer: https://api.day.app
+    barkGroup: Bark MCP Server
+    barkRetry: 1
+    barkAsync: true
+    barkSound: default
+    barkIcon: https://example.com/icon.png
+    barkLevel: active
+    barkVolume: 5
+    proxyUrl: http://proxy:8080

@@ -1,5 +1,7 @@
 # Barkme MCP Server
 
+[![smithery badge](https://smithery.ai/badge/@thevibeworks/barkme-mcp-server)](https://smithery.ai/server/@thevibeworks/barkme-mcp-server)
+
 A Model Context Protocol (MCP) server that provides iOS push notifications through the [Bark](https://bark.day.app/) service. Send notifications directly from Claude conversations with a simple, intelligent interface.
 
 ## Features
@@ -16,6 +18,14 @@ A Model Context Protocol (MCP) server that provides iOS push notifications throu
 
 - Node.js 18+
 - A [Bark](https://bark.day.app/) device key from the iOS app ([setup tutorial](https://bark.day.app/#/tutorial))
+
+### Installing via Smithery
+
+To install barkme-mcp-server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@thevibeworks/barkme-mcp-server):
+
+```bash
+npx -y @smithery/cli install @thevibeworks/barkme-mcp-server --client claude
+```
 
 ### Installation
 

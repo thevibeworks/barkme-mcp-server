@@ -29,11 +29,10 @@ npx -y @smithery/cli install @vibeworks/barkme-mcp-server --client claude
 
 ### Installation
 
-```bash
-# Via npm (recommended)
-npm install -g @vibeworks/barkme-mcp-server
+No installation required - use `npx` to run directly from npm registry.
 
-# Or from source
+**From source (development):**
+```bash
 git clone https://github.com/thevibeworks/barkme-mcp-server
 cd barkme-mcp-server
 npm install
@@ -54,15 +53,19 @@ Add to your Claude Desktop configuration file:
       "command": "npx",
       "args": ["@vibeworks/barkme-mcp-server"],
       "env": {
-        "BARK_DEVICES": "iPhone:abc123,iPad:def456,macOS:ghi789",
-        "BARK_DEFAULT_DEVICE": "iPhone"
+        "LOG_LEVEL": "info",
+        "BARK_DEVICES": "iPhone:<your key>",
+        "BARK_SERVER": "https://api.day.app",
+        "BARK_GROUP": "Claude",
+        "BARK_RETRY": "2",
+        "BARK_ASYNC": "true"
       }
     }
   }
 }
 ```
 
-**Alternative (from source):**
+**From source (development):**
 ```json
 {
   "mcpServers": {
@@ -70,8 +73,12 @@ Add to your Claude Desktop configuration file:
       "command": "node",
       "args": ["/absolute/path/to/barkme-mcp-server/dist/index.js"],
       "env": {
-        "BARK_DEVICES": "iPhone:abc123,iPad:def456,macOS:ghi789",
-        "BARK_DEFAULT_DEVICE": "iPhone"
+        "LOG_LEVEL": "info",
+        "BARK_DEVICES": "iPhone:<your key>",
+        "BARK_SERVER": "https://api.day.app",
+        "BARK_GROUP": "Claude",
+        "BARK_RETRY": "2",
+        "BARK_ASYNC": "true"
       }
     }
   }

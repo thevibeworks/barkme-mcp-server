@@ -1,5 +1,5 @@
 {
-  "name": "barkme-mcp-server",
+  "name": "@thevibeworks/barkme-mcp-server",
   "version": "0.1.0",
   "description": "A Model Context Protocol (MCP) server that provides iOS push notifications through the Bark service",
   "main": "dist/index.js",

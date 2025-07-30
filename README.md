@@ -30,6 +30,10 @@ npx -y @smithery/cli install @thevibeworks/barkme-mcp-server --client claude
 ### Installation
 
 ```bash
+# Via npm (recommended)
+npm install -g @thevibeworks/barkme-mcp-server
+
+# Or from source
 git clone https://github.com/thevibeworks/barkme-mcp-server
 cd barkme-mcp-server
 npm install
@@ -43,6 +47,22 @@ Add to your Claude Desktop configuration file:
 **macOS/Linux**: `~/.config/claude-desktop/claude_desktop_config.json`
 **Windows**: `%AppData%\Claude\claude_desktop_config.json`
 
+```json
+{
+  "mcpServers": {
+    "barkme": {
+      "command": "npx",
+      "args": ["@thevibeworks/barkme-mcp-server"],
+      "env": {
+        "BARK_DEVICES": "iPhone:abc123,iPad:def456,macOS:ghi789",
+        "BARK_DEFAULT_DEVICE": "iPhone"
+      }
+    }
+  }
+}
+```
+
+**Alternative (from source):**
 ```json
 {
   "mcpServers": {

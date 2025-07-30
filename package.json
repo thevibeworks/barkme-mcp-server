@@ -27,6 +27,10 @@
   "author": "Eric Wang <wrqatw@gmail.com>",
   "license": "MIT",
   "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "@vibeworks:registry": "https://registry.npmjs.org/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thevibeworks/barkme-mcp-server.git"

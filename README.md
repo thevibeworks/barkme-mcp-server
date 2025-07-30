@@ -16,35 +16,19 @@ A Model Context Protocol (MCP) server that provides iOS push notifications throu
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - A [Bark](https://bark.day.app/) device key from the iOS app ([setup tutorial](https://bark.day.app/#/tutorial))
+- A MCP Client like [Claude Desktop](https://claude.ai/desktop) or [Claude Code](https://claude.ai/code)
 
-### Installing via Smithery
+### via npmjs
 
-To install barkme-mcp-server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@thevibeworks/barkme-mcp-server):
 
-```bash
-npx -y @smithery/cli install @vibeworks/barkme-mcp-server --client claude
-```
-
-### Installation
-
-No installation required - use `npx` to run directly from npm registry.
-
-**From source (development):**
-```bash
-git clone https://github.com/thevibeworks/barkme-mcp-server
-cd barkme-mcp-server
-npm install
-npm run build
-```
-
-## Claude Desktop Integration
+#### Claude Desktop Integration
 
 Add to your Claude Desktop configuration file:
 
-**macOS/Linux**: `~/.config/claude-desktop/claude_desktop_config.json`
-**Windows**: `%AppData%\Claude\claude_desktop_config.json`
+- **macOS/Linux**: `~/.config/claude-desktop/claude_desktop_config.json`
+- **Windows**: `%AppData%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -65,7 +49,26 @@ Add to your Claude Desktop configuration file:
 }
 ```
 
-**From source (development):**
+
+*Restart Claude Desktop* after adding the configuration. The Barkme server will appear in the MCP tools section.
+
+### via Smithery
+
+To install barkme-mcp-server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@thevibeworks/barkme-mcp-server):
+
+```bash
+npx -y @smithery/cli install @vibeworks/barkme-mcp-server --client claude
+```
+
+
+### From source
+```bash
+git clone https://github.com/thevibeworks/barkme-mcp-server
+cd barkme-mcp-server
+npm install
+npm run build
+```
+
 ```json
 {
   "mcpServers": {
@@ -73,19 +76,13 @@ Add to your Claude Desktop configuration file:
       "command": "node",
       "args": ["/absolute/path/to/barkme-mcp-server/dist/index.js"],
       "env": {
-        "LOG_LEVEL": "info",
-        "BARK_DEVICES": "iPhone:<your key>",
-        "BARK_SERVER": "https://api.day.app",
-        "BARK_GROUP": "Claude",
-        "BARK_RETRY": "2",
-        "BARK_ASYNC": "true"
+      ...
       }
     }
   }
 }
 ```
 
-Restart Claude Desktop after adding the configuration. The Barkme server will appear in the MCP tools section.
 
 ## Usage Examples
 
@@ -180,4 +177,3 @@ MIT
 - [Bark](https://github.com/Finb/Bark) - The original iOS notification service
 - [barkme-tools](https://github.com/thevibeworks/yolo-tools) - Original shell script implementation
 - [Model Context Protocol](https://modelcontextprotocol.io/) - The MCP specification
-# barkme-mcp-server

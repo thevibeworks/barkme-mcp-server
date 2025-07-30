@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-export const VERSION = "0.1.0";
+export const VERSION = "0.1.1";
 
 const DEFAULT_BARK_SERVER = "https://api.day.app";
 const DEFAULT_GROUP_NAME = "Bark MCP Server";
@@ -546,16 +546,6 @@ function getOperationDescription(params: NotificationParams): string {
       ? `Sending notification "${params.title}"`
       : "Sending notification";
   }
-}
-
-function formatTargetList(
-  config: BarkConfig,
-  params: NotificationParams
-): string {
-  if (params.targets && params.targets.length > 0) {
-    return params.targets.join(", ");
-  }
-  return Array.from(config.devices.keys()).join(", ");
 }
 
 function formatAsyncResponse(

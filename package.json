@@ -1,6 +1,6 @@
 {
   "name": "@vibeworks/barkme-mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Model Context Protocol (MCP) server that provides iOS push notifications through the Bark service",
   "main": "dist/index.js",
   "bin": {
@@ -12,7 +12,11 @@
     "start": "node dist/index.js",
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "npm run release:patch",
+    "release:patch": "npm version patch && npm run build && npm publish",
+    "release:minor": "npm version minor && npm run build && npm publish",
+    "release:major": "npm version major && npm run build && npm publish"
   },
   "keywords": [
     "mcp",

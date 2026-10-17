@@ -196,18 +196,26 @@ function createNotificationSchema(config: BarkConfig) {
         .enum(["passive", "active", "timeSensitive", "critical"])
         .optional()
         .describe(
-          "Urgency level: passive=silent notification, active=normal alert (default), timeSensitive=breaks through Do Not Disturb, critical=emergency alert with sound"
+          config.level
+            ? `Urgency level (default: "${config.level}"): passive=silent, active=normal, timeSensitive=breaks DND, critical=emergency`
+            : "Urgency level: passive=silent notification, active=normal alert (default), timeSensitive=breaks through Do Not Disturb, critical=emergency alert with sound"
         ),
       group: z
         .string()
         .optional()
-        .describe("Category name to group related notifications together"),
+        .describe(
+          config.group
+            ? `Category name to group related notifications (default: "${config.group}")`
+            : "Category name to group related notifications together"
+        ),
       icon: z
         .string()
         .url()
         .optional()
         .describe(
-          "Custom icon image URL to display instead of default Bark icon"
+          config.icon
+            ? `Custom icon image URL (default: "${config.icon}")`
+            : "Custom icon image URL to display instead of default Bark icon"
         ),
       url: z
         .string()
@@ -216,7 +224,14 @@ function createNotificationSchema(config: BarkConfig) {
         .describe(
           "Web link or app URL to open when user taps the notification"
         ),
-      sound: z.string().optional().describe("Custom notification sound name"),
+      sound: z
+        .string()
+        .optional()
+        .describe(
+          config.sound
+            ? `Custom notification sound (default: "${config.sound}")`
+            : "Custom notification sound name"
+        ),
       badge: z
         .number()
         .int()
@@ -249,7 +264,11 @@ function createNotificationSchema(config: BarkConfig) {
         .min(0)
         .max(10)
         .optional()
-        .describe("Alert volume for critical notifications (0-10, default 5)"),
+        .describe(
+          config.volume !== undefined
+            ? `Alert volume for critical notifications (0-10, default: ${config.volume})`
+            : "Alert volume for critical notifications (0-10, default 5)"
+        ),
       action: z
         .enum(["none"])
         .optional()
@@ -631,10 +650,22 @@ function createNotifyTool(): ToolRegistration<NotificationParams> {
   const config = getBarkConfig();
   const notificationSchema = createNotificationSchema(config);
 
+  let description =
+    "Send push notifications to iOS devices via Bark. Use for alerts, updates, reminders, or any user communication.";
+  const defaults: string[] = [];
+  if (config.group) defaults.push(`group="${config.group}"`);
+  if (config.sound) defaults.push(`sound="${config.sound}"`);
+  if (config.icon) defaults.push(`icon="${config.icon}"`);
+  if (config.level) defaults.push(`level="${config.level}"`);
+  if (config.volume !== undefined) defaults.push(`volume=${config.volume}`);
+  if (defaults.length > 0) {
+    description += ` Configured defaults: ${defaults.join(", ")}. These will be used if not overridden.`;
+  }
+  description += " Supports urgency levels, custom appearance, actions, and notification management.";
+
   return {
     name: "notify",
-    description:
-      "Send push notifications to iOS devices via Bark. Use for alerts, updates, reminders, or any user communication. Supports urgency levels, custom appearance, actions, and notification management.",
+    description,
     inputSchema: makeJsonSchema(notificationSchema),
     handler: async (args: NotificationParams) => {
       try {
@@ -688,12 +719,8 @@ function createNotifyTool(): ToolRegistration<NotificationParams> {
   };
 }
 
-const server = new Server(
-  {
-    name: "barkme-mcp-server",
-    version: VERSION,
-    description: "Send iOS push notifications to users via Bark service",
-    instructions: `Feel free to send push notifications to iOS devices using the \`notify\` tool.
+function getServerInstructions(): string {
+  const base = `Feel free to send push notifications to iOS devices using the \`notify\` tool.
 
 KEY CAPABILITIES:
 - Send instant notifications with custom titles, messages, and alerts
@@ -706,9 +733,42 @@ COMMON USAGE PATTERNS:
 - Quick alerts: notify(message="Your task is complete")
 - Important alerts: notify(message="Server down", title="Alert", level="critical")
 - With actions: notify(message="New deployment", url="https://dashboard.com")
-- Updates: notify(message="Updated status", id="task-123")
+- Updates: notify(message="Updated status", id="task-123")`;
 
-The notify tool handles all the technical details - just provide the message and any optional parameters for enhanced notifications.`,
+  try {
+    const cfg = getBarkConfig();
+    const deviceAliases = Array.from(cfg.devices.keys());
+    const defaultsLines = [
+      `Server: ${cfg.server}`,
+      `Async: ${cfg.async ? "true" : "false"} (retries: ${cfg.retry})`,
+      `Default device: ${cfg.defaultDevice}`,
+      `Devices: ${deviceAliases.map((d) => `\`${d}\``).join(", ")}`,
+      `Group: ${cfg.group}`,
+      `Sound: ${cfg.sound ?? "(none)"}`,
+      `Icon: ${cfg.icon ?? "(none)"}`,
+      `Level: ${cfg.level ?? "(default)"}`,
+      `Volume: ${cfg.volume ?? "(default)"}`,
+    ];
+    return `${base}
+
+CURRENT CONFIGURATION:
+${defaultsLines.map((l) => `- ${l}`).join("\n")}`;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return `${base}
+
+CONFIGURATION ISSUE:
+- ${message}
+- Ensure \`BARK_DEVICES\` and related env vars are set as documented.`;
+  }
+}
+
+const server = new Server(
+  {
+    name: "barkme-mcp-server",
+    version: VERSION,
+    description: "Send iOS push notifications to users via Bark service",
+    instructions: getServerInstructions(),
   },
   {
     capabilities: {
